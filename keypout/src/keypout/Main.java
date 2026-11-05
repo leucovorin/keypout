@@ -9,6 +9,7 @@ public class Main {
 		vP.setVisible(true);
 		vP.setResizable(false);
 		
+		
 	}
 	
 	

@@ -1,6 +1,8 @@
 package keypout;
 
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.net.URL;
 import javax.swing.*;
 
@@ -16,9 +18,6 @@ public class VentanaPrincipal extends JFrame {
 
 		JPanel izquierda = panelBienvenida();
 		JPanel derecha = panelInicio();
-
-		izquierda.setMinimumSize(new Dimension(0, 0));
-		derecha.setMinimumSize(new Dimension(0, 0));
 		
 		contenedor = new JPanel(new GridBagLayout());
 		
@@ -28,11 +27,11 @@ public class VentanaPrincipal extends JFrame {
 		gbc.fill = GridBagConstraints.BOTH;
 		
 		gbc.gridx = 0;
-		gbc.weightx = 0.55;
+		gbc.weightx = 0.20;
 		contenedor.add(izquierda, gbc);
 		
 		gbc.gridx = 1;
-		gbc.weightx = 0.45;
+		gbc.weightx = 0.80;
 		contenedor.add(derecha, gbc);
 	
 		contenedor.setVisible(true);
@@ -40,7 +39,7 @@ public class VentanaPrincipal extends JFrame {
 		
 	}
 
-	public JPanel panelBienvenida() {
+	private JPanel panelBienvenida() {
 		
 		Color rosita = new Color(248,204,202);
 		
@@ -58,7 +57,6 @@ public class VentanaPrincipal extends JFrame {
 		JPanel logoYTexto = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		logoYTexto.setBackground(rosita);
 		logoYTexto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
-		logoYTexto.setBorder(BorderFactory.createLineBorder(Color.RED));
 		
 		URL ruta = getClass().getResource("/imagenes/logo.png");
 		
@@ -81,33 +79,148 @@ public class VentanaPrincipal extends JFrame {
 		bienvenida.setBackground(rosita);
 		
 		JLabel texto = new JLabel(
-    		"<html><div style='text-align:left;'>"
+    		"<html><div>"
     		+ "Tu seguridad,<br><span style=\"font-size: 30px; font-weight: normal;\">en buenas manos"
     		+ "</div></html>",
 			SwingConstants.CENTER
 		);
 
-		texto.setFont(new Font("Monospaced", Font.BOLD, 45));
+		texto.setFont(new Font("Monospaced", Font.BOLD, 85));
 		bienvenida.add(texto);
-
-		bienvenida.setBorder(BorderFactory.createLineBorder(Color.RED));
 		
 		// AÑADIMOS ELEMENTOS AL PANEL Y DEVOLVEMOS panelBienvenida.
 		jp.add(logoYTexto);
-		jp.add(Box.createVerticalStrut(220));
+		jp.add(Box.createVerticalStrut(200));
 		jp.add(bienvenida);
 		jp.setVisible(true);
-		jp.setBorder(BorderFactory.createLineBorder(Color.RED));
 		return jp;
 		
 	}
 	
-	public JPanel panelInicio() {
-		JPanel jp = new JPanel();
-		jp.setVisible(true);
-		jp.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+	private JPanel panelInicio() {
+
+	    JPanel jp = new JPanel();
+	    jp.setBackground(new Color(255,255,255));
+	    jp.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+	    jp.setLayout(new BoxLayout(jp, BoxLayout.Y_AXIS));
+
+	    JLabel titulo = new JLabel("Inicia sesión");
+	    titulo.setFont(new Font("Monospaced", Font.BOLD, 32));
+	    titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+	    // CREAMOS EL CAMPO DE TEXTO PARA EL NOMBRE DE USUARIO
+	    
+	    JTextField username = new JTextField();
+	    username.setMaximumSize(new Dimension(300, 40));
+	    username.setFont(new Font("Monospaced", Font.PLAIN, 16));
+	    username.setText("Nombre de usuario");
+	    
+	    username.addFocusListener(new FocusAdapter() {
+	    	@Override
+	    	public void focusGained(FocusEvent e) {
+	    		if(username.getBackground().equals(Color.red)) {
+	    			username.setBackground(Color.white);
+	    			username.setText("");
+	    		}
+	    		if(username.getText().equals("Nombre de usuario")) {
+	    			username.setText("");
+	    		}
+	    	}
+	    	
+	    	@Override
+	    	public void focusLost(FocusEvent e) {
+	    		if(username.getText().isEmpty()) {
+	    			username.setText("Nombre de usuario");
+	    		}
+	    	}
+	    });
+	    
+	    // CREAMOS EL CAMPO DE TEXTO PARA LA CONTRASEÑA
+	    
+	    JTextField password = new JTextField();
+	    password.setMaximumSize(new Dimension(300, 40));
+	    password.setFont(new Font("Monospaced", Font.PLAIN, 16));
+	    password.setText("Contraseña");
+	    
+	    password.addFocusListener(new FocusAdapter() {
+	    	@Override 
+	    	public void focusGained(FocusEvent e) {
+	    		if(password.getBackground().equals(Color.red)) {
+	    			password.setBackground(Color.white);
+	    			password.setText("");
+	    		}
+	    		
+	    		if(password.getText().equals("Contraseña")) {
+	    			password.setText("");
+	    		}
+	    	}
+	    	
+	    	@Override
+	    	public void focusLost(FocusEvent e) {
+	    		if(password.getText().equals("")) {
+	    			password.setText("Contraseña");
+	    		}
+	    	}
+	    });
+	    
+	    // CREAMOS LOS BOTONES
+	    
+	    JButton login = new JButton("Iniciar sesión");
+	    login.setMaximumSize(new Dimension(300, 40));
+	    login.setFont(new Font("Monospaced", Font.PLAIN, 16));
+	    login.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    
+	    login.addActionListener(e -> {
+	    	if(username.getText().equals("1") && password.getText().equals("1")) {
+	    		
+	    		VentanaPoli poli = new VentanaPoli();
+	    		
+	    		contenedor.removeAll();
+	    		contenedor.setLayout(new BorderLayout());
+	    		contenedor.add(poli.getContenedor(), BorderLayout.CENTER);
+	    		
+	    		contenedor.revalidate();
+	    		contenedor.repaint();
+	    		
+	    	} else {
+	    		username.setBackground(Color.red);
+	    		password.setBackground(Color.red);
+	    	}
+	    });
+	    
+	    JLabel t = new JLabel("O también puedes");
+	    t.setFont(new Font("Monospaced", Font.BOLD, 12));
+	    t.setAlignmentX(CENTER_ALIGNMENT);
+	    
+	    JButton signup = new JButton("Crear nuevo perfil");
+	    signup.setMaximumSize(new Dimension(300, 40));
+	    signup.setFont(new Font("Monospaced", Font.PLAIN, 16));
+	    signup.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+	    jp.add(Box.createVerticalGlue());
+	    jp.add(titulo);
+	    jp.add(Box.createVerticalStrut(25));
+	    jp.add(username);
+	    jp.add(Box.createVerticalStrut(15));
+	    jp.add(password);
+	    jp.add(Box.createVerticalStrut(15));
+	    jp.add(login);
+	    jp.add(Box.createVerticalStrut(15));
+	    jp.add(t);
+	    jp.add(Box.createVerticalStrut(15));
+	    jp.add(signup);
+	    jp.add(Box.createVerticalGlue());
+	    
+	   
+
+	    jp.setVisible(true);
+		
+	    jp.setFocusable(true);
+	    SwingUtilities.invokeLater(() -> jp.requestFocusInWindow());
+	    
 		return jp;
 	}
 	
 	
 }
+
