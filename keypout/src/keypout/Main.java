@@ -1,16 +1,20 @@
 package keypout;
 
-public class Main {
+import java.util.ArrayList;
 
+import javax.swing.*;
+
+public class Main {
 	
+	static public ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+	static public ArrayList<Zona> zonas = new ArrayList<Zona>();
+
 	public static void main(String[] args) {
 		
-		VentanaPrincipal vP = new VentanaPrincipal();
+		JFrame vP = new ventanas.VentanaPrincipal();
 		vP.setVisible(true);
 		vP.setResizable(false);
 		
-		
 	}
-	
 	
 }
